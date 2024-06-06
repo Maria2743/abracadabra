@@ -1,0 +1,2 @@
+// Crear en el servidor un arreglo de nombres y devolverlo en formato JSON a través de la ruta /abracadabra/usuarios
+export const usuarios = ['Juan', 'Jocelyn', 'Astrid', 'María', 'Ignacia', 'Javier', 'Brian']
