@@ -11,15 +11,32 @@ const __dirname = import.meta.dirname;
 app.use(express.static(__dirname + '/public'));
 
 
+app.get('/abracadabra/usuarios', (req, res) => {
+    res.json({
+        usuarios
+    })
+})
+
 //4.2 Función para que en caso de ser exitoso, permitir el paso a la ruta GET correspondiente, de lo contrario devolver la imagen "who.jpeg".
 
 const usuarioMiddleware = (req, res, next) => {
-    if (usuarios.find((user) => user === req.params.usuario)) {
+    const nombreUsuario = req.params.usuario;
+    const usuarioExiste = usuarios.find(u => u.toLowerCase() === nombreUsuario.toLowerCase());
+
+    if (usuarioExiste) {
         next();
     } else {
         res.sendFile(__dirname + "/public/assets/img/who.jpeg");
     }
 };
+
+
+//4.1 Crear un middleware con la ruta /abracadabra/juego/:usuario para validar que el usuario recibido como párametro "usuario" existe en el arreglo de nombres creador en el servidor.
+
+app.get('/abracadabra/juego/:usuario', usuarioMiddleware, (req, res) => {
+    res.sendFile(__dirname + '/public/index.html')
+})
+
 
 //5. , de lo contrario devolver la imagen de Voldemort.
 
@@ -32,22 +49,6 @@ const randomMiddleware = (req, res, next) => {
     }
 };
 
-app.get("/", (req, res) => {
-    res.sendFile(__dirname + '/public/index.html')
-})
-
-
-app.get('/abracadabra/usuarios', (req, res) => {
-    res.json({
-        usuarios
-    })
-})
-
-//4.1 Crear un middleware con la ruta /abracadabra/juego/:usuario para validar que el usuario recibido como párametro "usuario" existe en el arreglo de nombres creador en el servidor.
-
-app.get('/abracadabra/juego/:usuario', usuarioMiddleware, (req, res) => {
-    res.sendFile(__dirname + '/public/index.html')
-})
 
 //5.1 Crear una ruta /abracadabra/conejo/:n que valide si el parámetro "n" coincide con el número generado de forma aleatoria. En caso de ser existoso, devolver la imagen del conejo
 app.get('/abracadabra/conejo/:n', randomMiddleware, (req, res) => {
